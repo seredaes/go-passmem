@@ -3,6 +3,7 @@ package Env
 import (
 	"bufio"
 	"io"
+	"log"
 	"os"
 	"strings"
 )
@@ -43,6 +44,19 @@ func LoadEnv() {
 			readConfig(line)
 		} else {
 			panic("Error read string")
+		}
+	}
+
+	checkEnv()
+}
+
+func checkEnv() {
+	mandatoryKeys := []string{"SERVER", "ENCRYPT_KEY", "TOKEN_KEY"}
+
+	for _, key := range mandatoryKeys {
+		_, exist := GetConfig(key)
+		if !exist {
+			log.Fatalf("ENVIROMENT BROKEN! KEY: %s is absent", key)
 		}
 	}
 }
